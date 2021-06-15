@@ -67,14 +67,19 @@ dump: ## Run the composer dump
 	@docker exec -it "${PROJECT_NAME}-app" composer dump-autoload -o
 
 ##@ Quality Tools
-cs: ## Run Code Sniffer Tool
+phpcs: ## Run Code Sniffer Tool
 	@echo -e "~~> Running PHP Code Sniffer Tool..."
 	@docker exec -it "${PROJECT_NAME}-app" composer run phpcs
 	@echo -e "done!\n"
 
-fixer: ## Run PHP Code Beautifier Tool
+phpcbf: ## Run PHP Code Beautifier Tool
 	@echo -e "~~> Running PHP Code Beautifier Tool..."
 	@docker exec -it "${PROJECT_NAME}-app" composer run phpcbf
+	@echo -e "done!\n"
+
+psalm: ## Run Psalm static analyser
+	@echo -e "~~> Running PHP Code Beautifier Tool..."
+	@docker exec -it "${PROJECT_NAME}-app" composer run psalm
 	@echo -e "done!\n"
 
 ##@ PHP Unit - Tests
