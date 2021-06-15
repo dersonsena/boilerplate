@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Shared\Domain\ValueObjects;
 
-use App\Shared\Domain\Exceptions\InvalidDomainParamException;
+use App\Shared\Domain\Exceptions\InvalidPhoneException;
 use App\Shared\Domain\ValueObjectBase;
 
 final class Phone extends ValueObjectBase
@@ -22,15 +22,11 @@ final class Phone extends ValueObjectBase
         $dddSanitized = (string)preg_replace('/[\s+()]/', '', $ddd);
         $ddiSanitized = (string)preg_replace('/[+\s+]/', '', $ddi);
 
-        $this->checkPhoneHas8Or9Chars($phoneSanitized);
-
-        $this->checkIfDDDHasTwoChars($dddSanitized);
-
         $this->checkIfDDDIsNumeric($dddSanitized);
-
-        $this->checkIfDDIHasTwoChars($ddiSanitized);
-
+        $this->checkIfDDDHasTwoChars($dddSanitized);
         $this->checkIfDDIIsNumeric($ddiSanitized);
+        $this->checkIfDDIHasTwoChars($ddiSanitized);
+        $this->checkPhoneHasEightOrNineChars($phoneSanitized);
 
         $this->phone = $phoneSanitized;
         $this->ddd = $dddSanitized;
@@ -77,49 +73,49 @@ final class Phone extends ValueObjectBase
     private function checkIfPhoneIsEmptyOrNull(string $phone): void
     {
         if (empty($phone)) {
-            throw new InvalidDomainParamException("Phone number cannot be empty or null.");
+            throw new InvalidPhoneException("Phone number cannot be empty");
         }
     }
 
     private function checkIfDDDIsEmptyOrNull(string $ddd): void
     {
         if (empty($ddd)) {
-            throw new InvalidDomainParamException("DDD cannot be empty or null.");
+            throw new InvalidPhoneException("DDD cannot be empty or null");
         }
     }
 
-    private function checkPhoneHas8Or9Chars(string $phone): void
+    private function checkPhoneHasEightOrNineChars(string $phone): void
     {
         if (strlen($phone) < 8 || strlen($phone) > 9) {
-            throw new InvalidDomainParamException("Phone '{$phone}' number must be 8 or 9 digits");
+            throw new InvalidPhoneException("Phone '{$phone}' number must be 8 or 9 digits");
         }
     }
 
     private function checkIfDDDHasTwoChars(string $ddd): void
     {
         if (strlen($ddd) !== 2) {
-            throw new InvalidDomainParamException('DDD must be only 2 characters.');
+            throw new InvalidPhoneException('DDD must be only 2 characters.');
         }
     }
 
     private function checkIfDDDIsNumeric(string $ddd): void
     {
-        if (!is_numeric($ddd)) {
-            throw new InvalidDomainParamException('DDD must be numeric.');
+        if (!ctype_digit($ddd)) {
+            throw new InvalidPhoneException('The DDD must contain numbers only');
         }
     }
 
     private function checkIfDDIHasTwoChars(string $ddi): void
     {
         if (strlen($ddi) !== 2) {
-            throw new InvalidDomainParamException('DDI must be only 2 characters.');
+            throw new InvalidPhoneException('DDI must be only 2 characters.');
         }
     }
 
     private function checkIfDDIIsNumeric(string $ddi): void
     {
-        if (!is_numeric($ddi)) {
-            throw new InvalidDomainParamException('DDI must be numeric.');
+        if (!ctype_digit($ddi)) {
+            throw new InvalidPhoneException('The DDI must contain numbers only');
         }
     }
 

@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Shared\Domain;
 
 use App\Shared\Domain\Contracts\ValueObject;
+use ReflectionClass;
+use ReflectionException;
 
 abstract class ValueObjectBase implements ValueObject
 {
@@ -26,14 +28,17 @@ abstract class ValueObjectBase implements ValueObject
 
     /**
      * @inheritDoc
+     * @throws ReflectionException
      */
     public function objectHash(): string
     {
-        $props = get_class_vars(get_class($this));
+        $reflectObject = new ReflectionClass(get_class($this));
+        $props = $reflectObject->getProperties();
         $value = '';
 
-        foreach ($props as $value) {
-            $value .= $value;
+        foreach ($props as $prop) {
+            $prop->setAccessible(true);
+            $value .= $prop->getValue($this);
         }
 
         return md5($value);

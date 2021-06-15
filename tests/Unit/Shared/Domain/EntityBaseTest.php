@@ -10,7 +10,7 @@ use Tests\Unit\Shared\Domain\Fakes\AnyEntity;
 use Tests\Unit\Shared\Domain\Fakes\AnyValueObject;
 use TypeError;
 
-class EntityTest extends TestCase
+class EntityBaseTest extends TestCase
 {
     public static function makeSut(array $values = []): EntityBase
     {

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Shared\Exceptions;
+namespace App\Shared\Infra\Exceptions;
 
 class RuntimeException extends AppException
 {

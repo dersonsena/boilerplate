@@ -14,10 +14,14 @@ final class Cpf extends ValueObjectBase
     public function __construct(string $cpf)
     {
         if (empty($cpf)) {
-            throw new InvalidCpfException("CPF cannot be null or empty");
+            throw new InvalidCpfException("CPF cannot be empty");
         }
 
         $cpfSanitized = (string)preg_replace('/[^a-zA-Z0-9]/', '', $cpf);
+
+        if (!ctype_digit($cpfSanitized)) {
+            throw new InvalidCpfException('The CPF must contain numbers only');
+        }
 
         if (strlen($cpfSanitized) !== 11) {
             throw new InvalidCpfException("CPF should be 11 characters.");

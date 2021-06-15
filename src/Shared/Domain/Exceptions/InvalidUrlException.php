@@ -10,6 +10,7 @@ final class InvalidUrlException extends DomainError
 {
     public function __construct(string $url, array $details = [], int $code = 0, Throwable $previous = null)
     {
-        parent::__construct("Invalid URL: {$url}" . $url, $details, $code, $previous);
+        $details = array_merge($details, ['url' => $url]);
+        parent::__construct("Invalid URL '{$url}'", $details, $code, $previous);
     }
 }

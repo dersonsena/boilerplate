@@ -14,13 +14,20 @@ final class Cnpj extends ValueObjectBase
      */
     private $cnpj;
 
+    /**
+     * @throws InvalidCnpjException
+     */
     public function __construct(string $cnpj)
     {
         if (empty($cnpj)) {
-            throw new InvalidCnpjException("CNPJ cannot be null or empty");
+            throw new InvalidCnpjException("CNPJ cannot be empty");
         }
 
         $cnpjSanitized = preg_replace('/[^a-zA-Z0-9]/', '', $cnpj);
+
+        if (!ctype_digit($cnpjSanitized)) {
+            throw new InvalidCnpjException('The CNPJ must contain numbers only');
+        }
 
         if (strlen($cnpjSanitized) !== 14) {
             throw new InvalidCnpjException("CNPJ should be 14 characters.");
@@ -40,10 +47,6 @@ final class Cnpj extends ValueObjectBase
     private function validate(string $cnpj): bool
     {
         $cnpj = preg_replace('/[^0-9]/', '', $cnpj);
-
-        if (preg_match('/(\d)\1{13}/', $cnpj)) {
-            return false;
-        }
 
         for ($i = 0, $j = 5, $soma = 0; $i < 12; $i++) {
             $soma += intval($cnpj[$i]) * $j;
@@ -71,7 +74,7 @@ final class Cnpj extends ValueObjectBase
      */
     public function formatted(): string
     {
-        return preg_replace("/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/", "\$1.\$2.\$3\/\$4-\$5", $this->cnpj);
+        return preg_replace("/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/", "\$1.\$2.\$3/\$4-\$5", $this->cnpj);
     }
 
     public function value()
