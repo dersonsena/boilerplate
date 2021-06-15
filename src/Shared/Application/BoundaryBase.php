@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Shared\Application;
 
 use App\Shared\Application\Contracts\Boundary;
-use InvalidArgumentException;
+use App\Shared\Application\Exceptions\InvalidUseCaseParamException;
 
 /**
  * Class Boundary
@@ -19,7 +19,7 @@ abstract class BoundaryBase implements Boundary
     /**
      * Boundary constructor.
      * @param array $values
-     * @throws InvalidArgumentException if any property doesn't exists
+     * @throws InvalidUseCaseParamException
      */
     private function __construct(array $values)
     {
@@ -29,8 +29,9 @@ abstract class BoundaryBase implements Boundary
             }
 
             if (!property_exists($this, $key)) {
-                throw new InvalidArgumentException(
-                    "Property '{$key}' doesn't exists in Boundary Class '" . get_class() . "'"
+                throw new InvalidUseCaseParamException(
+                    "it couldn't construct boundary '" . get_class() . "' because the property '{$key}' doesn't exist",
+                    ['property' => $key]
                 );
             }
 
@@ -42,6 +43,7 @@ abstract class BoundaryBase implements Boundary
     /**
      * Static method to create a Boundary (Input or Output)
      * @param array $values Associative array such as `'property' => 'value'`
+     * @throws InvalidUseCaseParamException
      */
     public static function create(array $values): self
     {
@@ -58,6 +60,7 @@ abstract class BoundaryBase implements Boundary
 
     /**
      * {@inheritdoc}
+     * @throws InvalidUseCaseParamException
      */
     public function get(string $property)
     {
@@ -68,7 +71,7 @@ abstract class BoundaryBase implements Boundary
      * Magic getter method to get a Boundary property value
      * @param string $name
      * @return mixed
-     * @throws InvalidArgumentException if any property doesn't exists
+     * @throws InvalidUseCaseParamException
      */
     public function __get(string $name)
     {
@@ -79,18 +82,23 @@ abstract class BoundaryBase implements Boundary
         }
 
         if (!property_exists($this, $name)) {
-            throw new InvalidArgumentException(
-                "Property '{$name}' doesn't exists in Boundary Class '" . get_class() . "'"
+            throw new InvalidUseCaseParamException(
+                "it couldn't get the property '{$name}' because it doesn't exist in the Boundary Class '" . get_class() . "'",
+                ['property' => $name]
             );
         }
 
         return $this->{$name};
     }
 
+    /**
+     * @throws InvalidUseCaseParamException
+     */
     public function __set($name, $value)
     {
-        throw new InvalidArgumentException(
-            "The '{$name}' property of the '" . get_class() . "' Boundary/DTO Class is read-only."
+        throw new InvalidUseCaseParamException(
+            "you cannot change the property '{$name}' of the Boundary Class '" . get_class() . "' because it is read-only.",
+            ['property' => $name, 'value' => $value]
         );
     }
 }
