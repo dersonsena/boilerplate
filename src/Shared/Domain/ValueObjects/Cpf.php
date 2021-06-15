@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Shared\Domain\ValueObjects;
 
-use App\Shared\Domain\Exceptions\InvalidCPFException;
+use App\Shared\Domain\Exceptions\InvalidCpfException;
 use App\Shared\Domain\ValueObjectBase;
 
 final class Cpf extends ValueObjectBase
@@ -13,18 +13,18 @@ final class Cpf extends ValueObjectBase
 
     public function __construct(string $cpf)
     {
-        if (is_null($cpf) || empty($cpf)) {
-            throw new InvalidCPFException("CPF cannot be null or empty");
+        if (empty($cpf)) {
+            throw new InvalidCpfException("CPF cannot be null or empty");
         }
 
         $cpfSanitized = (string)preg_replace('/[^a-zA-Z0-9]/', '', $cpf);
 
         if (strlen($cpfSanitized) !== 11) {
-            throw new InvalidCPFException("CPF should be 11 characters.");
+            throw new InvalidCpfException("CPF should be 11 characters.");
         }
 
         if (!$this->validate($cpfSanitized)) {
-            throw new InvalidCPFException('Invalid CPF.');
+            throw new InvalidCpfException('Invalid CPF.');
         }
 
         $this->cpf = $cpfSanitized;
@@ -38,12 +38,12 @@ final class Cpf extends ValueObjectBase
     {
         for ($t = 9; $t < 11; $t++) {
             for ($d = 0, $c = 0; $c < $t; $c++) {
-                $d += $cpf[$c] * (($t + 1) - $c);
+                $d += intval($cpf[$c]) * (($t + 1) - $c);
             }
 
             $d = ((10 * $d) % 11) % 10;
 
-            if ($cpf[$c] != $d) {
+            if (intval($cpf[$c]) != $d) {
                 return false;
             }
         }

@@ -13,7 +13,7 @@ abstract class AppException extends Exception implements AppExceptionBase
     protected array $details = [];
     protected string $type = AppExceptionBase::TYPE_INTERNAL_ERROR;
 
-    public function __construct($message = '', array $details = [], ?int $code = 0, Throwable $previous = null)
+    public function __construct(string $message = '', array $details = [], int $code = 0, Throwable $previous = null)
     {
         $this->details = $details;
         $message = (!empty($message) ? $message : $this->message);

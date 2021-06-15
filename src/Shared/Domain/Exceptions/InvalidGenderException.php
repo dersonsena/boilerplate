@@ -8,7 +8,7 @@ use Throwable;
 
 final class InvalidGenderException extends DomainError
 {
-    public function __construct(string $gender, array $details = [], $code = 0, Throwable $previous = null)
+    public function __construct(string $gender, array $details = [], int $code = 0, Throwable $previous = null)
     {
         parent::__construct("Invalid gender '{$gender}'", $details, $code, $previous);
     }

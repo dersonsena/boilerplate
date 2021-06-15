@@ -23,6 +23,10 @@ trait EnumerationHelpers
         return array_keys((new ReflectionClass(__CLASS__))->getConstants());
     }
 
+    /**
+     * @param string|int|float $value
+     * @return bool
+     */
     public static function hasValue($value): bool
     {
         return in_array($value, self::valuesList());

@@ -11,7 +11,7 @@ final class InvalidAddressException extends DomainError
     public function __construct(
         string $message = "Invalid Address",
         array $details = [],
-        $code = 0,
+        int $code = 0,
         Throwable $previous = null
     ) {
         parent::__construct($message, $details, $code, $previous);

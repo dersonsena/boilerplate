@@ -39,7 +39,7 @@ class BoundaryTest extends TestCase
     public function testIfExceptionIsThrownWhenNoExistentPropertyIsCalled()
     {
         $this->expectException(InvalidUseCaseParamException::class);
-        $this->expectExceptionMessage("Invalid use case param: it couldn't get the property 'invalidProp' because it doesn't exist in the Boundary Class '". BoundaryBase::class ."'");
+        $this->expectExceptionMessage("Invalid use case param: it couldn't get the property 'invalidProp' because it doesn't exist in the Boundary '". BoundaryBase::class ."'");
 
         $sut = self::makeSut();
 
@@ -50,7 +50,7 @@ class BoundaryTest extends TestCase
     public function testIfExceptionIsThrownWhenPropertyIsChangedManually()
     {
         $this->expectException(InvalidUseCaseParamException::class);
-        $this->expectExceptionMessage("Invalid use case param: you cannot change the property 'stringProp' of the Boundary Class '". BoundaryBase::class ."' because it is read-only.");
+        $this->expectExceptionMessage("Invalid use case param: you cannot change the property 'stringProp' of the Boundary '". BoundaryBase::class ."' because it is read-only.");
 
         $sut = self::makeSut();
 

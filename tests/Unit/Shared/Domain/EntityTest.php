@@ -80,7 +80,7 @@ class EntityTest extends TestCase
     public function testIfExceptionIsThrownWhenPropertyDoesNotExists()
     {
         $this->expectException(InvalidDomainParamException::class);
-        $this->expectExceptionMessage("Invalid domain param: it couldn't change the value of property 'invalidProp' because it doesn't exist in Entity Class '". EntityBase::class ."'");
+        $this->expectExceptionMessage("Invalid domain param: it couldn't change the value of property 'invalidProp' because it doesn't exist in Entity '". EntityBase::class ."'");
 
         self::makeSut([
             'invalidProp' => self::$faker->words(2, true)
@@ -90,7 +90,7 @@ class EntityTest extends TestCase
     public function testIfExceptionIsThrownWhenNonexistentPropertyIsCalled()
     {
         $this->expectException(InvalidDomainParamException::class);
-        $this->expectExceptionMessage("Invalid domain param: you cannot get the property 'invalidProp' because it doesn't exist in the Entity Class '". EntityBase::class ."'");
+        $this->expectExceptionMessage("Invalid domain param: you cannot get the property 'invalidProp' because it doesn't exist in the Entity '". EntityBase::class ."'");
 
         $sut = self::makeSut();
 
@@ -200,7 +200,7 @@ class EntityTest extends TestCase
     public function testIfExceptionIsThrownWhenEntityPropertyIsChangedManually()
     {
         $this->expectException(InvalidDomainParamException::class);
-        $this->expectExceptionMessage("Invalid domain param: you cannot change the property 'stringProp' of the Entity Class '". EntityBase::class ."' because it is read-only.");
+        $this->expectExceptionMessage("Invalid domain param: you cannot change the property 'stringProp' of the Entity '". EntityBase::class ."' because it is read-only.");
 
         $sut = self::makeSut();
 

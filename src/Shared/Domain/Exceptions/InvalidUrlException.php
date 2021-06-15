@@ -8,7 +8,7 @@ use Throwable;
 
 final class InvalidUrlException extends DomainError
 {
-    public function __construct(string $url, $details = [], $code = 0, Throwable $previous = null)
+    public function __construct(string $url, array $details = [], int $code = 0, Throwable $previous = null)
     {
         parent::__construct("Invalid URL: {$url}" . $url, $details, $code, $previous);
     }

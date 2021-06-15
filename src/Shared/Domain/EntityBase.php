@@ -29,7 +29,7 @@ abstract class EntityBase implements Entity
      * @param array $values
      * @throws InvalidDomainParamException
      */
-    private function __construct(array $values)
+    final private function __construct(array $values)
     {
         $this->fill($values);
     }
@@ -82,8 +82,9 @@ abstract class EntityBase implements Entity
         }
 
         if (!property_exists($this, $property)) {
+            $class = get_class();
             throw new InvalidDomainParamException(
-                "it couldn't change the value of property '{$property}' because it doesn't exist in Entity Class '" . get_class() . "'",
+                "it couldn't change the value of property '{$property}' because it doesn't exist in Entity '{$class}'",
                 ['property' => $property, 'value' => $value]
             );
         }
@@ -109,6 +110,7 @@ abstract class EntityBase implements Entity
         $props = [];
         $propertyList = get_object_vars($this);
 
+        /** @var int|string|object $value */
         foreach ($propertyList as $prop => $value) {
             if ($value instanceof DateTimeInterface) {
                 $propertyList[$prop] = $value->format(DATE_ATOM);
@@ -174,7 +176,7 @@ abstract class EntityBase implements Entity
 
         if (!property_exists($this, $name)) {
             throw new InvalidDomainParamException(
-                "you cannot get the property '{$name}' because it doesn't exist in the Entity Class '" . get_class() . "'",
+                "you cannot get the property '{$name}' because it doesn't exist in the Entity '" . get_class() . "'",
                 ['property' => $name]
             );
         }
@@ -183,12 +185,13 @@ abstract class EntityBase implements Entity
     }
 
     /**
+     * @param mixed $value
      * @throws InvalidDomainParamException
      */
-    public function __set($name, $value)
+    public function __set(string $name, $value)
     {
         throw new InvalidDomainParamException(
-            "you cannot change the property '{$name}' of the Entity Class '" . get_class() . "' because it is read-only.",
+            "you cannot change the property '{$name}' of the Entity '" . get_class() . "' because it is read-only.",
             ['property' => $name, 'value' => $value]
         );
     }

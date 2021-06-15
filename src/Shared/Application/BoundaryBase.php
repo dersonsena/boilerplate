@@ -21,7 +21,7 @@ abstract class BoundaryBase implements Boundary
      * @param array $values
      * @throws InvalidUseCaseParamException
      */
-    private function __construct(array $values)
+    final private function __construct(array $values)
     {
         foreach ($values as $key => $value) {
             if (mb_strstr($key, '_') !== false) {
@@ -82,8 +82,9 @@ abstract class BoundaryBase implements Boundary
         }
 
         if (!property_exists($this, $name)) {
+            $class = get_class();
             throw new InvalidUseCaseParamException(
-                "it couldn't get the property '{$name}' because it doesn't exist in the Boundary Class '" . get_class() . "'",
+                "it couldn't get the property '{$name}' because it doesn't exist in the Boundary '{$class}'",
                 ['property' => $name]
             );
         }
@@ -92,12 +93,13 @@ abstract class BoundaryBase implements Boundary
     }
 
     /**
+     * @param mixed $value
      * @throws InvalidUseCaseParamException
      */
-    public function __set($name, $value)
+    public function __set(string $name, $value)
     {
         throw new InvalidUseCaseParamException(
-            "you cannot change the property '{$name}' of the Boundary Class '" . get_class() . "' because it is read-only.",
+            "you cannot change the property '{$name}' of the Boundary '" . get_class() . "' because it is read-only.",
             ['property' => $name, 'value' => $value]
         );
     }

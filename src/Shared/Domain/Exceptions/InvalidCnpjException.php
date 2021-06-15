@@ -9,7 +9,7 @@ final class InvalidCnpjException extends DomainError
     public function __construct(
         string $message = "Invalid CNPJ",
         array $details = [],
-        $code = 0,
+        int $code = 0,
         Throwable $previous = null
     ) {
         parent::__construct($message, $details, $code, $previous);

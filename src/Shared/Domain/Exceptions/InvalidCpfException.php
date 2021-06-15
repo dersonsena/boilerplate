@@ -9,9 +9,10 @@ final class InvalidCpfException extends DomainError
     public function __construct(
         string $message = '',
         array $details = [],
-        $code = 0,
+        int $code = 0,
         Throwable $previous = null
     ) {
-        parent::__construct("Invalid CPF", $details, $code, $previous);
+        $message = !empty($message) ? $message : "Invalid CPF";
+        parent::__construct($message, $details, $code, $previous);
     }
 }

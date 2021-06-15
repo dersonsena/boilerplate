@@ -16,7 +16,7 @@ final class Cnpj extends ValueObjectBase
 
     public function __construct(string $cnpj)
     {
-        if (is_null($cnpj) || empty($cnpj)) {
+        if (empty($cnpj)) {
             throw new InvalidCnpjException("CNPJ cannot be null or empty");
         }
 
@@ -39,14 +39,14 @@ final class Cnpj extends ValueObjectBase
      */
     private function validate(string $cnpj): bool
     {
-        $cnpj = preg_replace('/[^0-9]/', '', (string) $cnpj);
+        $cnpj = preg_replace('/[^0-9]/', '', $cnpj);
 
         if (preg_match('/(\d)\1{13}/', $cnpj)) {
             return false;
         }
 
         for ($i = 0, $j = 5, $soma = 0; $i < 12; $i++) {
-            $soma += $cnpj[$i] * $j;
+            $soma += intval($cnpj[$i]) * $j;
             $j = ($j == 2) ? 9 : $j - 1;
         }
 
@@ -57,7 +57,7 @@ final class Cnpj extends ValueObjectBase
         }
 
         for ($i = 0, $j = 6, $soma = 0; $i < 13; $i++) {
-            $soma += $cnpj[$i] * $j;
+            $soma += intval($cnpj[$i]) * $j;
             $j = ($j == 2) ? 9 : $j - 1;
         }
 

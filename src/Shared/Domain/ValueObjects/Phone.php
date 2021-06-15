@@ -13,14 +13,14 @@ final class Phone extends ValueObjectBase
     private string $ddd;
     private string $ddi;
 
-    private function __construct(string $phone, string $ddd, string $ddi = '+55')
+    final private function __construct(string $phone, string $ddd, string $ddi = '+55')
     {
         $this->checkIfPhoneIsEmptyOrNull($phone);
         $this->checkIfDDDIsEmptyOrNull($ddd);
 
-        $phoneSanitized = preg_replace('/[^a-zA-Z0-9]/', '', $phone);
-        $dddSanitized = preg_replace('/[\s+()]/', '', $ddd);
-        $ddiSanitized = preg_replace('/[+\s+]/', '', $ddi);
+        $phoneSanitized = (string)preg_replace('/[^a-zA-Z0-9]/', '', $phone);
+        $dddSanitized = (string)preg_replace('/[\s+()]/', '', $ddd);
+        $ddiSanitized = (string)preg_replace('/[+\s+]/', '', $ddi);
 
         $this->checkPhoneHas8Or9Chars($phoneSanitized);
 
@@ -32,17 +32,17 @@ final class Phone extends ValueObjectBase
 
         $this->checkIfDDIIsNumeric($ddiSanitized);
 
-        $this->phone = (string)$phoneSanitized;
-        $this->ddd = (string)$dddSanitized;
-        $this->ddi = (string)$ddiSanitized;
+        $this->phone = $phoneSanitized;
+        $this->ddd = $dddSanitized;
+        $this->ddi = $ddiSanitized;
     }
 
-    public static function createFromPieces(string $phone, string $ddd, string $ddi = '+55'): Phone
+    public static function createFromPieces(string $phone, string $ddd, string $ddi = '+55'): self
     {
         return new static($phone, $ddd, $ddi);
     }
 
-    public static function createFromDddAndPhone(string $phoneWithDdd): Phone
+    public static function createFromDddAndPhone(string $phoneWithDdd): self
     {
         $ddd = substr($phoneWithDdd, 0, 2);
         $phone = trim(substr($phoneWithDdd, 2, 9));
@@ -74,16 +74,16 @@ final class Phone extends ValueObjectBase
         return $this->ddi;
     }
 
-    private function checkIfPhoneIsEmptyOrNull(string $phone)
+    private function checkIfPhoneIsEmptyOrNull(string $phone): void
     {
-        if (is_null($phone) || empty($phone)) {
+        if (empty($phone)) {
             throw new InvalidDomainParamException("Phone number cannot be empty or null.");
         }
     }
 
-    private function checkIfDDDIsEmptyOrNull(string $ddd)
+    private function checkIfDDDIsEmptyOrNull(string $ddd): void
     {
-        if (is_null($ddd) || empty($ddd)) {
+        if (empty($ddd)) {
             throw new InvalidDomainParamException("DDD cannot be empty or null.");
         }
     }

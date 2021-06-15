@@ -11,7 +11,7 @@ final class InvalidDomainParamException extends DomainError
     public function __construct(
         string $message,
         array $details = [],
-        $code = 0,
+        int $code = 0,
         Throwable $previous = null
     ) {
         $details = array_merge([
