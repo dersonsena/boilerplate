@@ -1,5 +1,12 @@
-on: [pull_request]
-name: Pull Request CI
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+name: Pull Request and Master CI
 jobs:
   qa:
     name: Quality Analysis
@@ -17,6 +24,9 @@ jobs:
 
       - name: PHP Code Sniffer
         run: composer run phpcs
+
+      - name: PHP Static Analysis with PSalm
+        run: composer run psalm
 
   tests:
     name: PHP Unit
