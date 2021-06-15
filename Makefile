@@ -80,16 +80,16 @@ fixer: ## Run PHP Code Beautifier Tool
 ##@ PHP Unit - Tests
 
 test: ## Run the all suite test
-	@docker run --rm --interactive --tty -v ${PWD}:/app composer run test
+	@docker run --rm --interactive --tty -w /app -e XDEBUG_MODE=coverage -v ${PWD}:/app webdevops/php-dev:7.4 composer run test
 
 test-filter: ## Run a single test by method name (e.g make test-filter testYourTestName)
-	@docker run --rm --interactive --tty -v ${PWD}:/app composer run test-filter ${NAME}
+	@docker run --rm --interactive --tty -w /app -e XDEBUG_MODE=coverage -v ${PWD}:/app webdevops/php-dev:7.4 composer run test-filter ${NAME}
 
 test-coverage: ## Run the all suite test and generate the Code Coverage
-	@docker run --rm --interactive --tty -v ${PWD}:/app composer run coverage
+	@docker run --rm --interactive --tty -w /app -e XDEBUG_MODE=coverage -v ${PWD}:/app webdevops/php-dev:7.4 composer run coverage
 
 test-unit: ## Run the application unit tests only
-	@docker run --rm --interactive --tty -v ${PWD}:/app composer run test-unit
+	@docker run --rm --interactive --tty -w /app -e XDEBUG_MODE=coverage -v ${PWD}:/app webdevops/php-dev:7.4 composer run test-unit
 
 ##@ Database
 

@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace App\Shared\Domain;
 
 use App\Shared\Domain\Contracts\Entity;
+use App\Shared\Domain\Exceptions\InvalidDomainParamException;
 use DateTimeInterface;
-use InvalidArgumentException;
 use ReflectionClass;
+use ReflectionException;
 
 /**
  * Class Entity
@@ -26,7 +27,7 @@ abstract class EntityBase implements Entity
     /**
      * Entity constructor.
      * @param array $values
-     * @throws InvalidArgumentException if any property doesn't exists
+     * @throws InvalidDomainParamException
      */
     private function __construct(array $values)
     {
@@ -37,6 +38,7 @@ abstract class EntityBase implements Entity
      * Static method to create an Entity
      * @param array $values
      * @return EntityBase
+     * @throws InvalidDomainParamException
      */
     public static function create(array $values): Entity
     {
@@ -53,6 +55,7 @@ abstract class EntityBase implements Entity
 
     /**
      * @inheritDoc
+     * @throws InvalidDomainParamException
      */
     public function fill(array $values): void
     {
@@ -63,6 +66,7 @@ abstract class EntityBase implements Entity
 
     /**
      * @inheritDoc
+     * @throws InvalidDomainParamException
      */
     public function set(string $property, $value): Entity
     {
@@ -78,8 +82,9 @@ abstract class EntityBase implements Entity
         }
 
         if (!property_exists($this, $property)) {
-            throw new InvalidArgumentException(
-                "Property '{$property}' doesn't exists in Entity Class '" . get_class() . "'"
+            throw new InvalidDomainParamException(
+                "it couldn't change the value of property '{$property}' because it doesn't exist in Entity Class '" . get_class() . "'",
+                ['property' => $property, 'value' => $value]
             );
         }
 
@@ -97,6 +102,7 @@ abstract class EntityBase implements Entity
 
     /**
      * @inheritDoc
+     * @throws ReflectionException
      */
     public function toArray(bool $toSnakeCase = false): array
     {
@@ -147,16 +153,16 @@ abstract class EntityBase implements Entity
      *
      * @return array List of validations settings to be used in validation process
      */
-    public function validationRules(): array
+    /*public function validationRules(): array
     {
         return [];
-    }
+    }*/
 
     /**
      * Magic getter method to get an Entity property value
      * @param string $name
      * @return mixed
-     * @throws InvalidArgumentException if any property doesn't exists
+     * @throws InvalidDomainParamException
      */
     public function __get(string $name)
     {
@@ -167,18 +173,23 @@ abstract class EntityBase implements Entity
         }
 
         if (!property_exists($this, $name)) {
-            throw new InvalidArgumentException(
-                "Property '{$name}' doesn't exists in Entity Class '" . get_class() . "'"
+            throw new InvalidDomainParamException(
+                "you cannot get the property '{$name}' because it doesn't exist in the Entity Class '" . get_class() . "'",
+                ['property' => $name]
             );
         }
 
         return $this->{$name};
     }
 
+    /**
+     * @throws InvalidDomainParamException
+     */
     public function __set($name, $value)
     {
-        throw new InvalidArgumentException(
-            "The '{$name}' property of the '" . get_class() . "' Entity Class is read-only."
+        throw new InvalidDomainParamException(
+            "you cannot change the property '{$name}' of the Entity Class '" . get_class() . "' because it is read-only.",
+            ['property' => $name, 'value' => $value]
         );
     }
 }

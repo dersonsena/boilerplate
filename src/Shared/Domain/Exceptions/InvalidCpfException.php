@@ -2,13 +2,16 @@
 
 namespace App\Shared\Domain\Exceptions;
 
-use DomainException;
 use Throwable;
 
-final class InvalidCpfException extends DomainException
+final class InvalidCpfException extends DomainError
 {
-    public function __construct($message = "Invalid CPF", $code = 0, Throwable $previous = null)
-    {
-        parent::__construct($message, $code, $previous);
+    public function __construct(
+        string $message = '',
+        array $details = [],
+        $code = 0,
+        Throwable $previous = null
+    ) {
+        parent::__construct("Invalid CPF", $details, $code, $previous);
     }
 }

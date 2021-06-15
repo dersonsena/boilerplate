@@ -29,12 +29,12 @@ final class Address extends ValueObjectBase
         bool $sameMailingAddress = true
     ) {
         if (strlen($state) !== 2) {
-            throw new InvalidAddressException('Estado tem que ter exatamente 2 caracteres.');
+            throw new InvalidAddressException('State must be exactly 2 characters long.');
         }
 
         if (strlen($postalCode) !== 8) {
             throw new InvalidAddressException(
-                "CEP tem que ter exatamente 8 caracteres. " . strlen($postalCode) . ' foram dados'
+                "Zip code must be exactly 8 characters long, '" . strlen($postalCode) . "' given."
             );
         }
 

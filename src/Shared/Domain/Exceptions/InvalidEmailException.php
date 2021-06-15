@@ -6,14 +6,14 @@ namespace App\Shared\Domain\Exceptions;
 
 use Throwable;
 
-final class InvalidAddressException extends DomainError
+final class InvalidEmailException extends DomainError
 {
     public function __construct(
-        string $message = "Invalid Address",
+        string $email,
         array $details = [],
-        $code = 0,
+        int $code = 0,
         Throwable $previous = null
     ) {
-        parent::__construct($message, $details, $code, $previous);
+        parent::__construct("Invalid E-mail '{$email}'", $details, $code, $previous);
     }
 }

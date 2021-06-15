@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Shared\Domain\ValueObjects;
 
+use App\Shared\Domain\Exceptions\InvalidDomainParamException;
 use App\Shared\Domain\ValueObjectBase;
-use InvalidArgumentException;
 
 final class Phone extends ValueObjectBase
 {
@@ -50,9 +50,6 @@ final class Phone extends ValueObjectBase
         return new static($phone, $ddd);
     }
 
-    /**
-     * @return bool
-     */
     public function isMobile(): bool
     {
         if (strlen($this->phone) > 8) {
@@ -80,49 +77,49 @@ final class Phone extends ValueObjectBase
     private function checkIfPhoneIsEmptyOrNull(string $phone)
     {
         if (is_null($phone) || empty($phone)) {
-            throw new InvalidArgumentException("Phone number cannot be empty or null.");
+            throw new InvalidDomainParamException("Phone number cannot be empty or null.");
         }
     }
 
     private function checkIfDDDIsEmptyOrNull(string $ddd)
     {
         if (is_null($ddd) || empty($ddd)) {
-            throw new InvalidArgumentException("DDD cannot be empty or null.");
+            throw new InvalidDomainParamException("DDD cannot be empty or null.");
         }
     }
 
     private function checkPhoneHas8Or9Chars(string $phone): void
     {
         if (strlen($phone) < 8 || strlen($phone) > 9) {
-            throw new InvalidArgumentException('Phone "' . $phone . '" number must be 8 or 9 digits');
+            throw new InvalidDomainParamException("Phone '{$phone}' number must be 8 or 9 digits");
         }
     }
 
     private function checkIfDDDHasTwoChars(string $ddd): void
     {
         if (strlen($ddd) !== 2) {
-            throw new InvalidArgumentException('DDD must be only 2 characters.');
+            throw new InvalidDomainParamException('DDD must be only 2 characters.');
         }
     }
 
     private function checkIfDDDIsNumeric(string $ddd): void
     {
         if (!is_numeric($ddd)) {
-            throw new InvalidArgumentException('DDD must be numeric.');
+            throw new InvalidDomainParamException('DDD must be numeric.');
         }
     }
 
     private function checkIfDDIHasTwoChars(string $ddi): void
     {
         if (strlen($ddi) !== 2) {
-            throw new InvalidArgumentException('DDI must be only 2 characters.');
+            throw new InvalidDomainParamException('DDI must be only 2 characters.');
         }
     }
 
     private function checkIfDDIIsNumeric(string $ddi): void
     {
         if (!is_numeric($ddi)) {
-            throw new InvalidArgumentException('DDI must be numeric.');
+            throw new InvalidDomainParamException('DDI must be numeric.');
         }
     }
 

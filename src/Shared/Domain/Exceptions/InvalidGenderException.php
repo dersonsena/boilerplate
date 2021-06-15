@@ -4,14 +4,12 @@ declare(strict_types=1);
 
 namespace App\Shared\Domain\Exceptions;
 
-use DomainException;
 use Throwable;
 
-final class InvalidGenderException extends DomainException
+final class InvalidGenderException extends DomainError
 {
-    public function __construct(string $gender, $code = 0, Throwable $previous = null)
+    public function __construct(string $gender, array $details = [], $code = 0, Throwable $previous = null)
     {
-        $message = "Invalid gender '{$gender}'";
-        parent::__construct($message, $code, $previous);
+        parent::__construct("Invalid gender '{$gender}'", $details, $code, $previous);
     }
 }
